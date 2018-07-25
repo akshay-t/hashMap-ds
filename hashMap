@@ -1,0 +1,100 @@
+package a1;
+
+class BinaryTree{
+	private String val;
+	private String key;
+	private int hash;
+	private BinaryTree left,right;
+	
+	BinaryTree(String key,String val){
+		this.val=val;
+		this.key=key;
+		hash=key.hashCode();
+		left=null;
+		right=null;
+	}
+	
+	BinaryTree addNode(BinaryTree curr,String key,String val){
+		if(curr==null)
+			return new BinaryTree(key,val);
+		if(curr.hash > key.hashCode())
+			curr.left=addNode(curr.left,key,val);
+		else if(curr.hash < key.hashCode())
+			curr.right=addNode(curr.right,key,val);
+		
+		return curr;			
+	}
+	
+	String getNode(BinaryTree curr,String key){
+		if(curr==null)
+			return "Not Found";
+		if(curr.hash==key.hashCode())
+			return curr.val;	
+		if(curr.hash<key.hashCode())
+			return getNode(curr.right,key);
+		else
+			return getNode(curr.left,key);		
+	}
+	
+	String getKey() {
+		return this.key;
+	}
+	
+	String getValue() {
+		return this.val;
+	}
+	
+}
+
+class HashMap<K,V> {
+	
+	private BinaryTree[] values;
+		
+	public HashMap(){
+		values=new BinaryTree[100];	
+	}
+	
+	public void set(K key,V val){
+		int k=key.toString().hashCode()%100; 
+		System.out.println("key-" + key + " hashloc-" +k + " hash-" +key.toString().hashCode());
+		if(values[k]==null){
+			BinaryTree node=new BinaryTree(key.toString(),val.toString());
+			values[k]=node;
+		}
+		else{
+			BinaryTree node=values[k];
+			values[k]=node.addNode(node,key.toString(),val.toString());
+		}
+	}
+	
+	public String get(K key){
+		int k=key.toString().hashCode()%100;
+		
+		if(values[k]==null)
+			return "Not Found";
+		if(values[k].getKey()==key){
+			return values[k].getValue();
+		}
+		
+		return values[k].getNode(values[k],key.toString());
+	}
+}
+
+public class FullStory {
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		HashMap<String,String> map=new HashMap<String, String>(); 
+		map.set("81","num");
+		map.set("U","shaz");
+		map.set("UU","shaz1");
+		map.set("av","Sam");
+		map.set("qu","ron");
+		map.set("fw","bat");
+		map.set("x","su");
+		
+		System.out.println(map.get("x") );
+		
+	}
+
+}
